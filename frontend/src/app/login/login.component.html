@@ -1,0 +1,7 @@
+<form [formGroup]="loginForm">
+  <input id="username" type="text" formControlName="username" />
+  <input id="password" type="password" formControlName="password" />
+  <button type="button" (click)="onSubmit()" [disabled]="!loginForm.valid">
+    Submit
+  </button>
+</form>
