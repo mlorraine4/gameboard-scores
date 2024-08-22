@@ -17,9 +17,6 @@ import { passwordCheckValidator } from '../../../shared/password-check.directive
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent implements OnInit {
-  username: String = '';
-  password: String = '';
-  confirmPassword: String = '';
   signUpForm!: FormGroup;
 
   constructor(private authService: AuthService) {}
@@ -27,24 +24,32 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {
     this.signUpForm = new FormGroup(
       {
-        username: new FormControl(this.username, [
+        username: new FormControl('', [
           Validators.required,
-          Validators.min(6),
-          Validators.max(20),
+          Validators.minLength(6),
+          Validators.maxLength(20),
         ]),
-        password: new FormControl(this.password, [
+        password: new FormControl('', [
           Validators.required,
-          Validators.min(6),
-          Validators.max(20),
+          Validators.minLength(6),
+          Validators.maxLength(20),
         ]),
-        confirmPassword: new FormControl(this.confirmPassword, [
+        confirmPassword: new FormControl('', [
           Validators.required,
-          Validators.min(6),
-          Validators.max(20),
+          Validators.minLength(6),
+          Validators.maxLength(20),
         ]),
       },
       { validators: passwordCheckValidator }
     );
+  }
+
+  get username() {
+    return this.signUpForm.get('username');
+  }
+
+  get password() {
+    return this.signUpForm.get('password');
   }
 
   onSubmit() {
