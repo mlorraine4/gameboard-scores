@@ -1,0 +1,11 @@
+<p>friends works!</p>
+
+<!-- @if (friends | async) { @for (friend of friends; track friend.username) {
+<li>{{ friend.username }}</li>
+} @empty {
+<li>You have no friends, loser.</li>
+} } -->
+
+<div *ngFor="let friend of friends">
+  <li>{{ friend.username }}</li>
+</div>
