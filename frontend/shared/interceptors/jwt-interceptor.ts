@@ -1,6 +1,6 @@
 import { HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 export function jwtInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
   const token = inject(AuthService).getToken();

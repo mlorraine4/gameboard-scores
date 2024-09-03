@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LOGIN, SIGN_UP } from './constants/urls';
-import { AuthModel } from './models/auth.model';
+import { LOGIN_URL, SIGN_UP_URL } from '../constants/urls';
+import { AuthModel } from '../models/auth.model';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -28,7 +28,7 @@ export class AuthService {
   signUpUser(username: string, password: string) {
     const data: AuthModel = { username: username, password: password };
 
-    this.http.post(SIGN_UP, data).subscribe((res) => {
+    this.http.post(SIGN_UP_URL, data).subscribe((res) => {
       console.log(res);
     });
   }
@@ -36,14 +36,14 @@ export class AuthService {
   loginUser(username: string, password: string) {
     const data: AuthModel = { username: username, password: password };
 
-    this.http.post<{ token: string }>(LOGIN, data).subscribe((res) => {
+    this.http.post<{ token: string }>(LOGIN_URL, data).subscribe((res) => {
       console.log(res);
       this.token = res.token;
       if (this.token) {
         this.authenticatedSub.next(true);
         this.isAuthenticated = true;
         this.storeToken(this.token);
-        this.router.navigate(['/']);
+        this.router.navigate(['/friends']);
       }
     });
   }
@@ -62,5 +62,25 @@ export class AuthService {
 
   removeToken() {
     localStorage.removeItem('token');
+  }
+
+  getLocalStorage() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return;
+    }
+
+    return token;
+  }
+
+  authenticateFromLocalStorage() {
+    const token = this.getLocalStorage();
+    // TODO: write function to clear token on expiration
+
+    if (token) {
+      this.token = token;
+      this.isAuthenticated = true;
+      this.authenticatedSub.next(true);
+    }
   }
 }

@@ -6,7 +6,7 @@ import {
   withFetch,
   withInterceptors,
 } from '@angular/common/http';
-import { jwtInterceptor } from '../../shared/jwt.interceptor';
+import { jwtInterceptor } from '../../shared/interceptors/jwt-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [

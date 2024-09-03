@@ -5,7 +5,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { AuthService } from '../../../shared/auth.service';
+import { AuthService } from '../../../shared/services/auth.service';
 import { NgIf } from '@angular/common';
 import { passwordCheckValidator } from '../../../shared/password-check.directive';
 

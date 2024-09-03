@@ -6,8 +6,8 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class RouteGuard implements CanActivate {
