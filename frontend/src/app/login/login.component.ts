@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../../shared/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../shared/services/auth.service';
 import {
   FormControl,
   FormGroup,
@@ -14,20 +14,26 @@ import {
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
-  loginForm = new FormGroup({
-    username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
-  });
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
 
   constructor(private authService: AuthService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loginForm = new FormGroup({
+      username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(20),
+      ]),
+      password: new FormControl('', [Validators.required]),
+    });
+  }
 
   onSubmit() {
-    // this.authService.signUpUser(
-    //   this.signUpForm.value.username,
-    //   this.signUpForm.value.password
-    // );
+    this.authService.loginUser(
+      this.loginForm.value.username,
+      this.loginForm.value.password
+    );
   }
 }
