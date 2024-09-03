@@ -1,0 +1,12 @@
+<p>friend-form works!</p>
+
+<form>
+  <label>Username</label>
+  <input
+    id="username"
+    name="username"
+    placeholder="Search by username"
+    [formControl]="userSearchControl"
+  />
+  <button type="button" (click)="submitSearch()">Search</button>
+</form>
