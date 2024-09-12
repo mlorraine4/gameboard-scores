@@ -6,7 +6,7 @@ const notificationController = require("../controllers/notificationController");
 // Get all notifications for current user
 router.get("/me/notifications", notificationController.notification_list);
 // Update notification of user
-router.put("/me/notifications/:id", notificationController.notification_update);
+router.put("/me/notifications/:id", notificationController.notification_put);
 // Delete notification of user
 router.delete(
   "/me/notifcations/:id",

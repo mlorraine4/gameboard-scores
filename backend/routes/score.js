@@ -9,10 +9,10 @@ router.get("/scores", scoreController.score_list_get);
 // Add score(s)
 router.post("/scores", scoreController.score_post);
 // Get score
-router.get("/score/:id", scoreController.score_get);
+router.get("/scores/:id", scoreController.score_get);
 // Update score
-router.put("/score/:id", scoreController.score_put);
+router.put("/scores/:id", scoreController.score_put);
 // Delete score
-router.delete("/score/:id", scoreController.score_delete);
+router.delete("/scores/:id", scoreController.score_delete);
 
 module.exports = router;

@@ -4,6 +4,11 @@ const router = express.Router();
 // Controllers
 const userController = require("../controllers/userController");
 
+// Get current user data
+router.get("/me", userController.user_get);
+// TODO: IMPLEMENT user put
+// Update current user data
+// router.put("/me", userController.user_put);
 // Get all friends of current user
 router.get("/me/friends", userController.friend_list);
 // Add friend to current user
@@ -18,8 +23,5 @@ router.get("/users/search", userController.user_search);
 router.get("/me/profile");
 // Update user profile info
 router.put("/me/profile", userController.user_profile_put);
-// Update user account info
-// TODO: implement request
-// router.put("/me/account", userController.user_account_update);
 
 module.exports = router;
