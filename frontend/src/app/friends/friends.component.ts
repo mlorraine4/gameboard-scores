@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FriendService } from '../../../shared/services/friends.service';
 import { User } from '../../../shared/models/user.model';
-import { Observable, Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { AsyncPipe, NgFor } from '@angular/common';
+import { UserService } from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-friends',
@@ -11,16 +9,30 @@ import { AsyncPipe, NgFor } from '@angular/common';
   imports: [AsyncPipe, NgFor],
   templateUrl: './friends.component.html',
   styleUrl: './friends.component.css',
-  providers: [FriendService],
+  providers: [],
 })
 export class FriendsComponent implements OnInit {
   friends: User[] = [];
 
-  constructor(private friendService: FriendService) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    // this.friendService.getFriends().subscribe((friends) => {
-    //   this.friends = friends;
-    // });
+    this.userService.friends().subscribe((res) => {
+      this.friends = res.friends;
+    });
+  }
+
+  removeFriend(username: string) {
+    this.userService.removeFriend(username).subscribe((res) => {
+      console.log(res);
+      if (res.ok) {
+        const isUser = (user: User) => user.username === username;
+        let index = this.friends.findIndex(isUser);
+        if (index > -1) {
+          this.friends.splice(index, 1);
+        }
+      }
+      // TODO: display error
+    });
   }
 }

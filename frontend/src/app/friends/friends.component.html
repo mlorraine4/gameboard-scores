@@ -1,11 +1,10 @@
 <p>friends works!</p>
-
-<!-- @if (friends | async) { @for (friend of friends; track friend.username) {
-<li>{{ friend.username }}</li>
+<a href="/add-friend">Add Friend</a>
+<p>Your Friends</p>
+@for (friend of friends; track friend.username) {
+<div>{{ friend.username }}</div>
+<button>Start Session</button>
+<button (click)="removeFriend(friend.username)">Delete Friend</button>
 } @empty {
-<li>You have no friends, loser.</li>
-} } -->
-
-<div *ngFor="let friend of friends">
-  <li>{{ friend.username }}</li>
-</div>
+<div>You have no friends, loser.</div>
+}
