@@ -1,0 +1,19 @@
+<p>boardgame-form works!</p>
+
+<form>
+  <input
+    name="boardgame-search"
+    id="boardgame-search"
+    placeholder="Search"
+    [formControl]="boardgameSearchControl"
+  />
+  <button (click)="submitSearch()" type="button">Search</button>
+</form>
+
+<div>
+  @for (boardgame of boardgames; track boardgame) {
+  <a href="{{ boardgameUrl(boardgame.id) }}">{{ boardgame.title }}</a>
+  <button>Save Game</button>
+  <button>Add Score</button>
+  }
+</div>
