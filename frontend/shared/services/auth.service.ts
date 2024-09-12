@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LOGIN_URL, SIGN_UP_URL } from '../constants/urls';
-import { AuthModel } from '../models/auth.model';
+import { Auth } from '../models/auth.model';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -10,6 +10,8 @@ export class AuthService {
   private token!: string;
   private authenticatedSub = new Subject<boolean>();
   private isAuthenticated = false;
+
+  constructor(private http: HttpClient, private router: Router) {}
 
   getToken() {
     return this.token;
@@ -23,10 +25,8 @@ export class AuthService {
     return this.isAuthenticated;
   }
 
-  constructor(private http: HttpClient, private router: Router) {}
-
   signUpUser(username: string, password: string) {
-    const data: AuthModel = { username: username, password: password };
+    const data: Auth = { username: username, password: password };
 
     this.http.post(SIGN_UP_URL, data).subscribe((res) => {
       console.log(res);
@@ -34,18 +34,22 @@ export class AuthService {
   }
 
   loginUser(username: string, password: string) {
-    const data: AuthModel = { username: username, password: password };
+    const data: Auth = { username: username, password: password };
 
-    this.http.post<{ token: string }>(LOGIN_URL, data).subscribe((res) => {
-      console.log(res);
-      this.token = res.token;
-      if (this.token) {
-        this.authenticatedSub.next(true);
-        this.isAuthenticated = true;
-        this.storeToken(this.token);
-        this.router.navigate(['/friends']);
-      }
-    });
+    this.http
+      .post<{ token: string; expiresIn: number }>(LOGIN_URL, data)
+      .subscribe((res) => {
+        console.log(res);
+        this.token = res.token;
+        if (this.token) {
+          this.authenticatedSub.next(true);
+          this.isAuthenticated = true;
+          const now = new Date();
+          const expiresDate = new Date(now.getTime() + res.expiresIn * 1000);
+          this.storeToken(this.token, expiresDate);
+          this.router.navigate(['/friends']);
+        }
+      });
   }
 
   logOutUser() {
@@ -56,31 +60,44 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  storeToken(token: string) {
+  storeToken(token: string, expirationDate: Date) {
     localStorage.setItem('token', token);
+    localStorage.setItem('expiresIn', expirationDate.toISOString());
   }
 
   removeToken() {
     localStorage.removeItem('token');
+    localStorage.removeItem('expiresIn');
   }
 
   getLocalStorage() {
     const token = localStorage.getItem('token');
-    if (!token) {
+    const expiresIn = localStorage.getItem('expiresIn');
+
+    if (!token || !expiresIn) {
       return;
     }
 
-    return token;
+    return {
+      token: token,
+      expiresIn: new Date(expiresIn),
+    };
   }
 
   authenticateFromLocalStorage() {
-    const token = this.getLocalStorage();
-    // TODO: write function to clear token on expiration
+    const localStorageData = this.getLocalStorage();
+    console.log('authenticating from local storage');
+    if (localStorageData) {
+      const now = new Date();
+      const expiresIn = localStorageData.expiresIn.getTime() - now.getTime();
 
-    if (token) {
-      this.token = token;
-      this.isAuthenticated = true;
-      this.authenticatedSub.next(true);
+      if (expiresIn > 0) {
+        this.token = localStorageData.token;
+        this.isAuthenticated = true;
+        this.authenticatedSub.next(true);
+      } else {
+        this.logOutUser();
+      }
     }
   }
 }
