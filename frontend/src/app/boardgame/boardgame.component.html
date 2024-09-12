@@ -1,0 +1,17 @@
+<p>boardgame works!</p>
+
+@if (boardgame) {
+<div>{{ boardgame.title }}</div>
+<img src="{{ boardgame.photo_url }}" />
+<div>{{ boardgame.description }}</div>
+
+@if(isSaved(boardgame.bgg_id)) {
+<button disabled>Added to Games</button>
+} @else {
+<button (click)="addBoardgame($event, boardgame.bgg_id)">Add to Games</button>
+
+}
+<!-- @if(isFavorite(boardgame.id)){} -->
+<button>Favorite</button>
+<button>Save Score</button>
+}
