@@ -10,3 +10,34 @@
   />
   <button type="button" (click)="submitSearch()">Search</button>
 </form>
+
+<p>Search Results</p>
+<div *ngFor="let user of users; index as i">
+  <!-- @for (user of users; track user; let i = $index) {
+  <div>{{ user.username }}</div>
+  <button (click)="sendFriendRequest(user)" [disabled]="formSubmitted[i]">
+    Send Request
+  </button>
+  } -->
+  <!-- TODO: use a custom pipe and control flow (@for, @if) to display results  -->
+  <div>{{ user.username }}</div>
+  <button
+    *ngIf="!hasSentRequest(user) && !hasRecievedRequest(user)"
+    [disabled]="formSubmitted[i]"
+    (click)="sendFriendRequest(user)"
+  >
+    Send Friend Request
+  </button>
+  <button disabled *ngIf="!hasRecievedRequest(user) && hasSentRequest(user)">
+    Friend Request Pending
+  </button>
+  <button
+    id="{{ user.username }}"
+    *ngIf="!hasSentRequest(user) && hasRecievedRequest(user)"
+    [disabled]="formSubmitted[i]"
+    (click)="sendFriendRequest(user)"
+  >
+    Accept Request
+  </button>
+  <div *ngIf="this.formSubmitted[i]">Request Sent</div>
+</div>
