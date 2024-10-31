@@ -1,0 +1,9 @@
+<p>notifications works!</p>
+@for (notification of notifications; track notification) { @if(notification.__t
+=== "FriendRequest") {
+<div>You have a new friend request from {{ notification.sender.username }}</div>
+<button>Accept Request</button>
+} @else { You have been added to a new session of
+{{ notification.session.game }}. }
+<button (click)="updateNotifications(notification)">change notification</button>
+}
