@@ -1,44 +1,48 @@
+<p>what the fuck</p>
+<!-- TODO: change ngIf to @if -->
 <form [formGroup]="signUpForm" #formDir="ngForm" (ngSubmit)="onSubmit()">
-  <div [hidden]="formDir.submitted">
-    <input id="username" type="text" formControlName="username" />
-    <input id="password" type="password" formControlName="password" />
-    <input
-      id="confirmPassword"
-      type="password"
-      formControlName="confirmPassword"
-    />
-    <button type="submit" [disabled]="!signUpForm.valid">Sign Up</button>
-    <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
-      <div *ngIf="username?.hasError('required')">Username is required.</div>
-      <div *ngIf="username?.hasError('minlength')">
-        Usernames must be at least 6 characters.
-      </div>
-      <div *ngIf="username?.hasError('maxlength')">
-        Usernames must be between 6-20 characters.
-      </div>
-    </div>
+  <label for="username">Username</label>
+  <input id="username" type="text" formControlName="username" />
+  <label for="password">Password</label>
 
-    <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
-      <div *ngIf="password?.hasError('required')">Password is required.</div>
-      <div *ngIf="password?.hasError('minlength')">
-        Passwords must be at least 6 characters.
-      </div>
-    </div>
+  <input id="password" type="password" formControlName="password" />
+  <label for="confirmPassword">Confirm Password</label>
 
-    <div
-      *ngIf="
-        signUpForm.hasError('passwordsDoNotMatch') &&
-        (signUpForm.touched || signUpForm.dirty)
-      "
-      class="cross-validation-error-message alert alert-danger"
-    >
-      Passwords do not match.
+  <input
+    id="confirmPassword"
+    type="password"
+    formControlName="confirmPassword"
+  />
+  <button type="submit" [disabled]="!signUpForm.valid">Sign Up</button>
+  <app-error></app-error>
+  <app-success></app-success>
+  @if (success) {
+  <a href="/login">Log In</a>
+  }
+  <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+    <div *ngIf="username?.hasError('required')">Username is required.</div>
+    <div *ngIf="username?.hasError('minlength')">
+      Usernames must be at least 6 characters.
+    </div>
+    <div *ngIf="username?.hasError('maxlength')">
+      Usernames must be between 6-20 characters.
     </div>
   </div>
-  <div *ngIf="formDir.submitted">
-    <div>
-      Sign Up Successful!
-      <a href="/login">Log In</a>
+
+  <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+    <div *ngIf="password?.hasError('required')">Password is required.</div>
+    <div *ngIf="password?.hasError('minlength')">
+      Passwords must be at least 6 characters.
     </div>
+  </div>
+
+  <div
+    *ngIf="
+      signUpForm.hasError('passwordsDoNotMatch') &&
+      (signUpForm.touched || signUpForm.dirty)
+    "
+    class="cross-validation-error-message alert alert-danger"
+  >
+    Passwords do not match.
   </div>
 </form>
