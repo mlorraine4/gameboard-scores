@@ -1,0 +1,69 @@
+<p>session-form works!</p>
+<p>score-form works!</p>
+<form [formGroup]="searchForm">
+  <input type="text" id="search" formControlName="search" />
+  <button type="button" (click)="searchBoardgames()">Search Games</button>
+</form>
+<form [formGroup]="friendSearchForm">
+  <input
+    type="text"
+    id="friendSearch"
+    formControlName="friendSearch"
+    (keyup)="searchFriends()"
+  />
+  <button type="button" (click)="searchFriends()">Invite Friend</button>
+  <!-- Drop Down for Search Results -->
+  <!-- TODO: clear search results after adding user -->
+  <div>
+    @for (user of userSearchResults; track user; let i=$index) {
+    <div (click)="addPlayer(user.username, user._id, i)">
+      {{ user.username }}
+    </div>
+    }
+  </div>
+
+  <div></div>
+</form>
+
+<form [formGroup]="form" (ngSubmit)="saveSession()">
+  <div>Game</div>
+  <!-- BOARDGAME SEARCH -->
+  @for (boardgame of boardgameSearchResults; track boardgame) {
+  <label>{{ boardgame.title }}</label>
+  <input
+    id="boardgameId"
+    formControlName="boardgameId"
+    value="{{ boardgame.bgg_id }}"
+    type="radio"
+  />
+  }
+
+  <!-- PLAYER SCORES FORM -->
+  <div formArrayName="players">
+    <button (click)="addPlayer('')" type="button">Add Player</button>
+
+    @for (player of players.controls; track player; let i=$index) {
+    <div [formGroupName]="i">
+      <label>Player</label>
+      <input id="username-{{ i }}" formControlName="username" />
+      <label>Points</label>
+      <input id="points-{{ i }}" formControlName="points" />
+      <label>Won</label>
+      <input
+        id="won-{{ i }}"
+        type="checkbox"
+        formControlName="won"
+        value="true"
+      />
+      <input id="id={{ i }}" formControlName="id" hidden />
+      <button type="button" (click)="removePlayer(i)">X</button>
+    </div>
+
+    }
+  </div>
+  <app-error></app-error>
+  <button type="button" (click)="saveSession()" [disabled]="!form.valid">
+    Save Score
+  </button>
+  <app-success></app-success>
+</form>
