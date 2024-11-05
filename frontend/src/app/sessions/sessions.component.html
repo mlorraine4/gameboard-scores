@@ -1,0 +1,15 @@
+<p>Play History</p>
+@for (session of sessions; track session) {
+<div>{{ session.game.title }}</div>
+@for (score of session.scores; track score) { @if (score.player) {
+<div>{{ score.player.username }}</div>
+} @else {
+<div>{{ score.guest }}</div>
+}
+<div>{{ score.points }} pts</div>
+} }
+<p>High Scores</p>
+@for (highScore of highScores; track highScore) {
+<div>{{ highScore.game.title }}</div>
+<div>{{ highScore.points }}</div>
+}
